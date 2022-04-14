@@ -1,0 +1,506 @@
+\documentclass[twoside,11pt]{article}
+
+
+%%% FROM MY STYLING
+
+\usepackage{enumerate}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{verbatim}
+\usepackage{multicol}
+\usepackage{listings}
+\DeclareSymbolFont{largesymbols}{OMX}{cmex}{m}{n} % However for large sigmas we want the Computer Modern symbol
+\renewcommand{\ttdefault}{cmtt}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{color}
+%\usepackage{clrscode4e}
+\usepackage{xspace} % xspace takes care of the \@ after a capitalized word before a period.
+\usepackage{multicol}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+
+
+\usepackage{amsmath,amsfonts,amsthm,bm} % Math packages
+
+
+\let\proof\relax
+\let\endproof\relax
+
+% for formatting algorithms
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+
+\usepackage{jmlr2e}
+
+%%% END FROM MY STYLING
+
+
+
+% Definitions of handy macros can go here
+
+\newcommand{\dataset}{{\cal D}}
+\newcommand{\fracpartial}[2]{\frac{\partial #1}{\partial  #2}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\reals}{\mathbb{R}}
+\let\mc\mathcal
+\newcommand{\bmc}[1]{\bm{\mc{#1}}}
+%\newcommand{\mbf}{\mathbf}
+\let\mbf\mathbf
+\let\bb\mathbb
+
+%\newcommand{\lg}[1]{\mat}
+%\newcommand{th}[1]{$n$}
+%\DeclareMathOperator\lg{lg}
+
+
+% Define a \HEADER{Title} ... \ENDHEADER block
+\makeatletter
+\newcommand{\Header}[1]{\ALC@it\underline{\textsc{#1}}\begin{ALC@g}}
+\newcommand{\EndHeader}{\end{ALC@g}}
+\makeatother
+
+
+% Heading arguments are {volume}{year}{pages}{submitted}{published}{author-full-names}
+
+%\jmlrheading{1}{2000}{1-48}{4/00}{10/00}{}
+
+\ShortHeadings{Dissertation Critique - Patera}{Structured Learning of BN Critique}
+\firstpageno{1}
+
+\begin{document}
+
+\title{Critique of the PhD dissertation, \textit{Structure Learning of Bayesian Networks: Group Regularization and Divide-and-Conquer} by \citep{jiaying}}
+
+\author{\name Nathan Patera \email are52tap@gmail.com \\
+       \addr Gianforte School of Computing\\
+       Montana State University\\
+       Bozeman, MT 59715, USA
+       }
+
+\editor{Patera}
+
+\maketitle
+
+\section{Introduction}
+
+Learning a Bayesian Network from sample data is typically a two step process. First, the structure of the Bayesian Network needs to be found. This process requires finding the set of directed edges representing the causality of the Random Variables onto others. The second step is finding the parameterizations that accurately represents the joint distributions of the sampled training data. It is clear that to efficiently represent and learn the distributions and minimize the amount of parameterizations of a Bayesian Network, it is necessary to find the correct set of directed edges to represent the causality of the nodes (the Random Variables) as is done in the first step. %The dissertation this paper cover covers methods in learning the structure 
+
+In their PhD dissertation, \cite{jiaying} explores two methods or algorithms for capturing the causal structure of a Bayesian Network (BN) using sampled data. 
+
+The first method is a continuation of the work by \cite{zhou} for using regularization and coordinate descent (CD) in learning the causal structure with discrete rather than continuous data (as was done in the previous work). The second method is more novel in that it develops an algorithm (PEF) with the objective of finding the causal structure of massive (high dimensionality) Gaussian Bayesian Networks (GBN) with great accuracy and fast runtime as compared to other established algorithms.
+
+The structure of this critique will first go over the first method and coordinate descent (CD) algorithm correlating with the first chapter of the dissertation. The second chapter of the dissertation explained the usage of the author's code in their \textbf{R} package for the discrete CD algorithm discussed in Chapter 1; this paper will not cover its contents although it is a contribution to the community. After discussing the first algorithm, the second method and algorithm (PEF) will be discussed correlating with the third chapter of the dissertation. More specific literature will be discussed at the introduction of each of these sections, and the evaluation of their contributions will be made at the end of these general contributions. After these two sections, there will be a brief discussion of the dissertations overall contributions and conclusions.
+
+\section{Bayesian Network Causal Learning Methods}
+
+In general there are 3 kinds of methods for learning the structure of BNs.\begin{enumerate}[1.]
+    \item Constraint-based: Uses conditional independence tests to determine the skeleton of a BN, or a Complete Partially Directed Acyclic Graph (CPDAG). Then v-structures are discovered on the undirected edges to turn it into a DAG. Here are a few established algorithms mentioned: PC, MMPC, Fast Causal Inference. 
+    \item Score-based: Uses a scoring function to evaluate and determine graph structures. There are many scoring functions using: Bayesian Information Criterion, Minimum Description Length, Entropy, Greedy Hill Climbing (HC), K2, and Monte Carlo.
+    \item Hybrid: a mixture of constraint and score-based methods. One such example is MMHC which first uses MMPC to find the skeleton structure then uses Greedy Hill Climbing (HC) to find the edge directions.
+\end{enumerate}
+
+%\section{Causal Learning Bayesian Networks}
+
+\section{Causal Learning with Categorical Data}
+
+%https://arxiv.org/pdf/1403.2310.pdf
+
+The algorithm proposed is a coordinate descent (CD) algorithm that works on discrete Bayesian Networks. This CD algorithm is score-based like many others of its class. The entirety of Chapter 2 of the dissertation seems to be a continuation of works starting with \citep{gu2014penalized} where they first propose their discrete CD algorithm. The work has been re-publicated since 2014 in 2015, 2016, and 2018 (the year of the dissertation), where the final 2018 revision is a nearly identical copy of Chapter 2.
+
+While this work is a continuation of the work by \citeauthor{zhou}, other previous works have not really focused on coordinate descent algorithms in the area of Bayesian networks. Coordinate descent algorithms have mostly been used in lasso problems in linear regression models seeking to minimize parameters for sparse models. Previous works these two papers (\cite{zhou} and \cite{gu2014penalized}) have been influenced by works in \cite{friedman2007} and \cite{wu2008coordinate} in statistics for paramater optimization.
+
+% To effectively 
+
+% The method proposed will be a score-based algorithm using a group norm penalty function.
+
+%\subsection{Related Literature}
+\subsection{Structure}
+
+Let $X_i\in\mbf{X}$ represent an individual discrete random variable in a Bayesian Network $\mc{G}$ with a total of $p=|\mbf{X}|$ random variables such that $\exists X_i\in\mbf{X}$ for integers $1\leq{i}\leq p$. Let $r_i$ be the number of values a particular $X_i$ random variable can take on; in other words let $r_i=\lvert \text{Val}(X_i)\rvert$ be the number of \textit{levels} $X_i$ may take on. Let $d_i=r_i-1$. Likewise let $V=\{V_i \mid \exists X_i\in\mbf{X}\}$ be the set of nodes in a directed acyclic graph representing (DAG), the structure of a Bayesian Network, where the node $V_i$ represents $X_i$. Let $\Pi^\mathcal{G}_i$ be $\text{Pa}(X_i)$ in the BN $\mc{G}$.
+
+Let $\mbf x_i$ be a vector representing a variable assignment for $X_i$ such that $x_i\in\bb{R}^{d_i}$ where $x_{i\ell}=1$ if $X_i=\ell$ or $x_{i\ell}=0$ otherwise. $\mbf x_i$ is the zero vector when $X_i$ is the reference value such that $X_i = (r_i = d_i+1)$. Let $\mbf x=(1,\mbf x_1,\dots,\mbf x_p)$ be the variable assignments for $\forall X_i \in \mbf{X}$.
+
+\subsection{Causality and Intervention}
+
+In many cases, multiple unique factorizations of a joint probability distribution could exist resulting in a unique DAG for each factorization due to observational equivalence between those DAGs existing for that joint distribution.
+\begin{equation}
+    P(\mbf{X} = x) = P(x_1,\dots,x_p) = \prod_{i=1}^{p}P(x_i\mid \Pi^\mc{G}_i) \label{eq:1.1}
+\end{equation}
+
+In structure learning, the existence of these observational or distributionally equivalent BNs complicates learning the proper causality of random variables in the Bayesian network or correct directionality within its DAG. To distinguish the correct causality, interventional data can be used (as in the presented algorithm). Experimental interventions can be used to \textit{help} distinguish these DAGs. Let $\mc{M}\subset\{1,\dots,p\}$ be a set of nodes under intervention in $\mc{G}^\mc{M}$; then when a node $X_i$ is under intervention, $i\in \mc{M}$, its parental connections are severed such that $\Pi^{\mc{G}^\mc{M}}_i=\varnothing$. Let $P(x_i\mid\bullet)$ be the (non-joint) distribution of $X_i$ under intervention, then the factorization of Equation \eqref{eq:1.1} becomes
+\begin{equation}
+    P(\mbf{X} = x) = P(x_1,\dots,x_p) = \prod_{i\not\in\mc{M}}^{p}P(x_i\mid \Pi^\mc{G}_i)\prod_{i\in\mc{M}}^{p}P(x_i\mid \bullet). \label{eq:1.2}
+\end{equation}
+\noindent Realizing the last term $\prod_{i\in\mc{M}}^{p}P(x_i\mid \bullet)$ evaluates to be a constant, it can be ignored within the distribution when used later in \eqref{eq:2.8}.
+
+Let a set of interventions for $N$ data points be denoted by $\bm{\mc{M}}=\{\mc{M}_i\}_N$. \citeauthor{hauser2012} shows that interventional Markov equivalence makes identifiability greater than observational Markov equivalence. Unfortunately due to \textit{interventional Markov equivalence}, it is possible that two DAGs, $\mc{G}_1$ and $\mc{G}_2$, remain indistinguishable under any intervention set $\mc{M}$, such that $\forall\mc{M}\in\bmc{M}$,  $\mc{G}^\mc{M}_1$ and $\mc{G}^\mc{M}_2$ are Markov equivalent, sharing the same skeleton and v-structure (\cite{hauser2012}). 
+
+An intervention set $\bmc M$ is said to be \textit{conservative} if $\forall{X_j\in\mc{X}}, \exists{\mc{M}\in\bmc{M}}$ where $j\not\in\mc{M}$. \citeauthor{eberhardt} posited that $O(\lg(p)+1)$ experimental intervention sets are sufficient or necessary to recover all causalities, and constrained with at most $k_\text{max}\leq{|\mc{M}_i|}\leq\frac{p}{2}$ interventions for a data point, it would be $O((\frac{p}{k_\text{max}}-1)+\frac{p}{2k_\text{max}}\lg(k_\text{max}))$.
+
+\subsection{Multi-logit model}
+
+Let $\bm{\beta}$ represent a discrete parameterization between nodes in the DAG of $\mc{G}$. $\bm{\beta}=(\bm\beta_{j\ell i})$ is a 4 dimensional array of values, such that for any two distinct nodes $X_j$ and $X_i$, $\bm\beta_{j\ell i}\in \mathbb{R}^{j_i}$ be a 1 dimensional array or vector of coefficients specifying a parameterization for how $X_i$ effects the $\ell^\text{th}$ level of $X_j$. Let $\bm\beta_{j\ell \cdot}=(\bm\beta_{j\ell i} : 0\leq i\leq p )$ where $\beta_{j\ell 0}$ is an intercept coefficient effecting the $\ell^\text{th}$ value or level of $X_j$ in the multi-logit regression model of Equation \eqref{eq:2.2}.
+
+
+\begin{equation}
+\label{eq:2.2}
+\begin{aligned}
+    P(X_j=\ell \mid \Pi^\mathcal{G}_j)&=\frac{\exp(\beta_{j\ell 0}+\sum_{i=1}^{p}\mbf{x}_i^T \bm{\beta}_{j\ell i})}{\sum_{m=1}^{r_j}\exp(\beta_{jm0}+\sum_{i=1}^{p}\mbf{x}_i^T \bm{\beta}_{jmi})} \\
+    &=\frac{\exp(\mbf{x}^T \bm{\beta}_{j\ell\cdot})}{\sum_{m=1}^{r_j}\exp(\mbf{x}^T \bm{\beta}_{jm\cdot})}\\
+    &\overset{\Delta}{=} p_{j\ell}(\mbf{x})
+\end{aligned}
+\end{equation}
+
+Let $\bm\beta_{j\cdot i} = (\bm\beta_{j\ell i} : 1\leq\ell\leq r_j )$, be the parameters specifying how $X_i$ affects $X_j$. Similar to $\bm\beta_{j\ell 0}$, let $\bm\beta_{j\cdot 0}$ be intercept coefficients for  $X_j$ in the multi-logit model in Equation \eqref{eq:2.2}.
+
+In the DAG for a BN $\mc{G}$ there is no edge from $X_i$ to $X_j$, meaning the parameters ($\bm\beta_{j\cdot i}$), for that edge must have no effect on $X_j$, which is the case only when:
+\begin{equation}
+    \bm\beta_{j\cdot i} = \mbf 0 \iff i \not\in \Pi_j^\mc{G} \label{eq:2.8}
+\end{equation}
+
+\subsubsection{Constraints and regularization}
+
+It should be plain to realize that in a BN there are no edges $X_i\rightarrow X_i$ in the DAG, and as such $\bm\beta_{i\cdot i} = \mbf 0$.
+
+To improve the identifiability between different DAGs with the same interventional Markov equivalence using the proposed symmetric logit-model, intercepts for $X_j$ at the $\ell=1$ level are anchored to $0$, \begin{equation*}
+    \bm\beta_{j 1 0}=\bm 0,\;\;\; \forall{j}\in[1,p].
+\end{equation*}
+
+\noindent The parameterization is further regularized between random variables amongst the levels of $X_j$ to improve identifiability for other parameters as shown by \cite{friedman2010},% according to Equation \eqref{eq:2.4}
+\begin{equation*}
+    \sum_{m=1}^{r_j}\bm\beta_{jmi}=\bm 0,\;\;\;\forall{i,j}\in[1,p].
+    %\forall i,j=1,\dots,p \label{eq:2.4}
+\end{equation*}
+
+\subsubsection{Log-likelihood function}
+
+% TODO what is n,p?
+Let $\mc{X}$ be a data set $(\mc{X}_{hi})_{n\times p}$ with $\mc{X}_{hi}$ being the level or value for $X_i$ for the $h^\text{th}$ data point. For a random variable $X_j$, let $\mc{I}_j$ be a set of data point where $X_j$ is under intervention, $\mc{I}_j = \{h : \forall\mc{X}_{hj}, j \in \mc{M}_h\}$, and let $\mc{O}_j=\overline{\mc{I}_j}=\{1,\dots,n\}\setminus\mc{I}_j$ be its compliment where it is observational, or not being intervened. The log-likelihood function $\ell(\bm\beta)$  using the multi-logit model (Equation \eqref{eq:2.2}), can be factorized according to Equation \eqref{eq:1.2} (ignoring the last term ``constant") as shown below:
+\begin{align}
+    \ell(\bm\beta)&%=\ell(\bm\beta \mid \mc{X})
+    =\sum_{h=1}^n{\ln p(\mc{X}_{h} \mid \bm\beta)}
+    %\\&
+    =\sum_{h=1}^n{ \ln\prod_{j\not\in{\mc{M}}}{p(\mc{X}_{hj} \mid \mbf{x}_{h,i},\forall{i}\in\Pi_j^\mc{G})} } && \text{by \eqref{eq:1.2}} \nonumber
+    \\&
+    =\sum_{h=1}^n{ \sum_{j\not\in{\mc{M}}}{ \ln p(\mc{X}_{hj} \mid \mbf{x}_{h,i},\forall{i}\in\Pi_j^\mc{G})} }
+    \nonumber
+    \\&
+    =\sum_{j=1}^p{\sum_{h\in\mc{O}_j}{ \ln p(\mc{X}_{hj} \mid \mbf{x}_{h,i},\forall{i}\in\Pi_j^\mc{G})} }\nonumber\\ 
+    % &=\sum_{j=1}^p{\sum_{h\in\mc{O}_j}^n{
+    % \ln\prod_{\ell=1}^{r_j} p(\mc{X}_{hj} = \ell \mid \mbf{x}_{h,i},\forall{i}\in\Pi_j^\mc{G})
+    % }}\\
+    % &=\sum_{j=1}^p{\sum_{h\in\mc{O}_j}^n{
+    %     \sum_{\ell=1}^{r_j} \ln \frac{\exp(\mbf{x}_h^T \bm{\beta}_{j\ell\cdot})}{\sum_{m=1}^{r_j}\exp(\mbf{x}^T \bm{\beta}_{jm\cdot})}
+    % }}\\
+    &=\sum_{j=1}^p{\sum_{h\in\mc{O}_j}{
+        \ln\frac{\exp(\mbf{x}_h^T \bm{\beta}_{j\ell\cdot})}{\sum_{m=1}^{r_j}\exp(\mbf{x}^T \bm{\beta}_{jm\cdot})}
+    }} && \text{by \eqref{eq:2.2}}\nonumber\\
+    &=\sum_{j=1}^p{\sum_{h\in\mc{O}_j}{\Bigg[
+        \sum_{\ell=r_j}^p y_{hj\ell}\mbf{x}_h^T \bm{\beta}_{j\ell\cdot} -\ln{\sum_{m=1}^{r_j}\exp(\mbf{x}^T \bm{\beta}_{jm\cdot})}\Bigg]
+    }} && \text{where $y_{hj\ell}=\text{I}(\mc{X}_{hj}=\ell)$}
+    \nonumber\\%\label{eq:2.7}\\
+    &=\sum_{j=1}^p{\sum_{h\in\mc{O}_j}{\Bigg[
+        \mbf{x}_h^T \bm{\beta}_{j\ell\cdot} -\ln{\sum_{m=1}^{r_j}\exp(\mbf{x}^T \bm{\beta}_{jm\cdot})}\Bigg]
+    }} =\sum_{h\in\mc{O}_j}{\ell_j(\bm\beta_{j\cdot\cdot})} && \text{where $\ell=\mc{X}_{hj}$}
+    \label{eq:2.7}
+\end{align}
+
+\subsection{Group Norm Penalty}
+
+Since learning the structure is the primary objective of the presented method, a group norm penalty is used on the directed edges themselves. This is done by applying the penalty on the matrix of parameters $\bm\beta_{j\cdot i}$ as a whole, instead of penalizing parameters individually. Let the penalty function $f_\lambda(\bm\beta)$ in Equation \eqref{eq:2.10} be composed of the negated likelihood function $\ell(\bm\beta)$ (to penalize ``inaccuracy" through incorrect parameterizations) and a sum of L2-norms of $\bm\beta_{j\cdot i}$ $\forall{i,j},i\neq j$ (to penalize extra edges as a result of having non-zero parameterizations for an edge) weighted by some $\lambda\in\reals>0$.
+
+\begin{equation}
+    f_\lambda(\bm\beta) = -\ell(\bm\beta)+\lambda\sum_{j=1}^{p}\sum_{i=1}^{p}\lVert\bm\beta_{j\cdot i}\rVert \label{eq:2.10}
+\end{equation}
+Then the optimal parameterization $\hat{\bm\beta}_\lambda$ is the one that minimizes the penalty function $f_\lambda(\bm\beta)$,
+\begin{equation*}
+    \hat{\bm\beta}_\lambda=\argmin_{\bm\beta:\mc G_{\bm\beta}\text{ is a DAG}}{f_\lambda(\bm\beta)}.
+\end{equation*}
+
+\subsection{The CD Algorithm}
+
+The discrete CD algorithm as proposed in this dissertation is very similar to continuous CD algorithm (for GBNs) in \cite{zhou}, in that they use coordinate descent only on the block $\{\bm{\beta}_{i\cdot j},\bm{\beta}_{j\cdot i}\}\in\bm{\beta}$ individually $\forall{i,j}\in[1,p]$ where $i\neq j$.
+
+\subsubsection{Single coordinate descent step}
+
+In particular for an edge $j\leftarrow i$, the parameters $\bm\beta_{j\cdot i}$ need to be optimized with respect to minimizing $f_{\lambda,j}(\bm\beta_{j\cdot\cdot})$ or $f_{\lambda,j}(\cdot)$ defined in Equations \eqref{eq:2.11} and  \eqref{eq:2.11.1} holding all other variables constant, where the log-likelihood is defined in Equations \eqref{eq:2.7} aand $\bm\beta_{j\cdot\cdot}=\{\bm\beta_{j\cdot k}: 0\leq k\leq p \}$.\begin{align}
+    f_{\lambda,j}(\bm\beta_{j\cdot \cdot})=-\ell_j(\bm\beta_{j\cdot \cdot})+\lambda\sum_{k=1}^{p}\lVert\bm\beta_{j\cdot k}\rVert \label{eq:2.11}
+% \end{equation}
+% \noindent Minimizing $f_{\lambda,j}(\cdot)$ with respect to $\bm\beta_{j\cdot i}$ would be
+% \begin{equation}
+    \\
+    f_{\lambda,j}(\bm\beta_{j\cdot i})=-\ell_j(\bm\beta_{j\cdot i})+\lambda\lVert\bm\beta_{j\cdot i}\rVert \label{eq:2.11.1}
+\end{align}
+A quadratic estimation of $f_{\lambda,j}(\bm\beta_{j\cdot i})$ is made with the $2^\text{nd}$-order Taylor expansion of $\ell_j(\bm\beta_{j\cdot i})$:
+\begin{equation}
+    f_{\lambda,j}(\bm\beta_{j\cdot i})\approx Q_{\lambda,j}^{(t)}(\bm\beta_{j\cdot i})=-\bigg\{
+    \Big(\bm\psi_{j\cdot i}^{(t)}\Big)^T
+    \nabla\ell_j \Big(\bm\beta_{j\cdot i}\Big)
+    +\frac{1}{2}\Big(\bm\psi_{j\cdot i}^{(t)}\Big)^T
+    \mbf{H}_{ji}^{(t)}\Big(\bm \psi_{j\cdot i}^{(t)}\Big)
+    \bigg\}
+    +\lambda\lVert\bm\beta_{j\cdot i}\rVert,
+\end{equation}
+\noindent where $\bm\psi_{j\cdot i}^{(t)}=\bm\beta_{j\cdot i}-\bm\beta_{j\cdot i}^{(t)}$, $\nabla\ell_j$ is defined in Equation \eqref{eq:2.13}, and $\mbf{H}_{ji}^{(t)}=h_{ji}^{(t)}\mbf{I}_{d_i r_j}$ is the approximated Hessian (derivative matrix) of $\ell_j(\cdot)$ such that
+
+\begin{equation*}
+    h_{ji}^{(t)}=h_{ji}(\bm\beta^{(t)})\overset{\Delta}{=}-\max\{\text{diag}(-\mbf{H}_{\ell_j}(\bm\beta_{j\cdot i}^{(t)})),b\},
+\end{equation*}
+\noindent so the scalar $h_{ji}^{(t)}<0$ is selected from the diagonal of the true Hessian of $\ell_j(\cdot)$ where $-b<0$ is a lower scalar bound.\begin{equation}
+    \nabla\ell_j \Big(\bm\beta_{j\cdot i}\Big)=\sum_{h\in\mc{O}_j}
+    \bigg(\big(y_{hjk}-p_{jk}^{(t)}(\mbf x_h)\big)\mbf x_{h,i}: \forall k \in [1,r_j]\bigg)
+    % \begin{pmatrix}
+    %     \big(y_{hj1}-p_{j1}^{(t)}(\mbf x_h)\big)\mbf x_{h,i}\\
+    %     \vdots\\
+    %     \big(y_{hjr_j}-p_{jr_j}^{(t)}(\mbf x_h)\big)\mbf x_{h,i}\\
+    % \end{pmatrix}
+    \label{eq:2.13}
+\end{equation}
+
+Under Karush-Kuhn-Tucker conditions, the minimizer of $Q_{\lambda,j}^{(t)}(\bm\beta_{j\cdot i})$ is defined to be:
+
+\begin{equation}
+    \bar{\bm\beta}_{j\cdot i}^{(t)}
+    =\begin{cases} 
+    0 & \text{if }\lVert\bm d_{ji}^{(t)}\rVert \leq \lambda\\
+    -\frac{1}{h_{ji}^{(t)}}\Bigg[1-\frac{\lambda}{\lVert\bm d_{ji}^{(t)}\rVert} \Bigg]\bm d_{ji}^{(t)} & \text{otherwise} 
+   \end{cases}
+   \label{eq:2.15}
+\end{equation}
+
+Let $\bm s_{ji}^{(t)}=\bar{\bm\beta}_{j\cdot i}^{(t)}-\bm\beta_{j\cdot i}^{(t)}$ be the difference from the paramaterization minimizer and the current paramaterization. Let $\alpha^{(t)}$ be a learning rate being the $\max\{\alpha_0 \eta^k\}_{k\geq 0}$, and using $\lambda = 0$ for intercepts, then the descent step update for the edges and intercepts would be:
+\begin{align}
+    \bm\beta_{j\cdot i}^{(t+1)}=\bm\beta_{j\cdot i}^{(t)}+\alpha^{(t)}\bm s_{ji}^{(t)}.\label{eq:2.16}\\
+    \bm\beta_{j\cdot 0}^{(t+1)}=\bar{\bm\beta}_{j\cdot i}^{(t)}=-\bm d_{ji}^{(t)}/h_{j0}^{(t)}\label{eq:2.17}
+\end{align}
+
+
+\subsubsection{Blockwise coordinate descent}
+
+The discrete CD algorithm works as follows:\begin{enumerate}[1.]
+    \item In the first loop of the presented algorithm, all possible undirected edges are considered for the block $\{\bm{\beta}_{i\cdot j},\bm{\beta}_{j\cdot i}\}\in\bm{\beta}$. A constraint on the DAG $\mc G$ is there may be no cycles. If $i\leftarrow j$ induces a cycle for $\mc{G}_{\bm\beta}$, denoted $\bm{\beta}_{i\cdot j}\Leftarrow \bm 0$, then $\bm{\beta}_{i\cdot j}\gets \bm 0$, and $\bm\beta_{j\cdot i}$ is minimized according to $f_{\lambda,j}$ so that $\bm\beta_{i\cdot j}\gets\argmin_{\beta_{j\cdot i}} f_{\lambda,j}(\cdot)$. This step is done again equivalently but conversely for the case $j \leftarrow i$. If neither direction induces a cycle, then the edge direction, $a\leftarrow b$, that does not best minimize the penalty function will be $\bm\beta_{a\cdot b}\gets \bm 0$, and once again $\bm\beta_{b\cdot a}$ is minimized on $f_{\lambda,j}$ potentially including or removing the directed edge $b\leftarrow a$. Where $(a,b)\in\{(i,j),(j,i)\}$, and all parameter updates follow Equation \eqref{eq:2.16}.
+    \item After this first loop, intercepts are updated according to Equation \eqref{eq:2.17}.
+    \item In the second loop all active edges $j \leftarrow i$ or $(i,j)\in (E(t)=\{(i,j):\bm\beta_{j\cdot i}^{(t)}\neq \bm 0\})$ are settled until convergence, such that $\bm\beta^{(t+1)}=\bm\beta^{(t)}$, according to $\bm\beta_{j\cdot i}\gets\argmin_{\beta_{j\cdot i}} f_{\lambda,j}(\cdot)$.
+    \item Steps 1 through 3 (first loop, intercept updates, and second loop) are repeated until convergence of $\bm\beta$, when paramaterizations stop updating, or some other stopping criterion.
+\end{enumerate}
+
+\subsubsection{Asymptotic theory}
+
+Let $\bm\phi$ denote the parameterization of $\bm\beta$. If $i\in\text{ac(j)}$ for all $i,j\in[1,p]$ in $G_{\bm\phi}$ such that $\mc{I}_P(X_i;X_j)$, then the parameter $\bm\phi$ is natural. Now let $\bm\phi^\ast$ be the (objective) true and natural parameterization. Let $\mc{X}^j\subset\mc{X}$ be a block of the data where $X_j$ is under intervention, where $\mc{X}$ consists of $p+1$ blocks, and let the block $\mc{X}^{p+1}$ be only observational data (no interventions). The block $\mc{X}^k$ has $n_k=|\mc{X}^k|$ number of samples. Let $\bm\phi_{[k]}$ be the paramaterization of $\bm\phi$ by intervening on $X_k$ such that $\bm\beta_{k\cdot i}=\bm 0$ $\forall{i}\in[1,p].$
+
+The paper makes two theorems (\ref{theo:5} and \ref{theo:6}) under the following assumptions: the natural parameter $\bm\phi^{\ast}$ is within the search space of the algorithm; the paramater $\bm\theta_j$ of the conditional distribution $[X_j\mid\Pi_j^\mc{G};\bm\theta_j]$ is identifiable; and the log-likelihood function $\ell_j(\bm\theta_j)$ $\forall{j}\in[1,p]$ is strictly concave for the search space.
+
+\renewcommand\thetheorem{5}
+\begin{theorem}
+\label{theo:5} Assume the aforementioned assumptions. For any (and all) possible assignments $\mbf{x}$, if the probability for interventions on the estimated parameters $\bm\phi$ and true parameters $\bm\phi^{\ast}$ equal, $p(\mbf x \mid \bm\phi_{[k]})=p(\mbf x \mid \bm\phi^{\ast}_{[k]})$ for all $k\in[1,p]$, then $\bm\phi=\bm\phi^{\ast}$. In the case $n_k \gg \sqrt{n}$ $\forall{k}\in[1,p]$, then the probability that the log-likelihood of the solution $\bm\phi^\ast$ will be greater than the log-likelihood of the estimation $\bm\phi$ (for $\bm\phi^\ast \neq \bm\phi$) will approach 1 in the limit as $n$ approaches $\infty$.
+\end{theorem}
+
+The primary result of Theorem (\ref{theo:5}) is that it shows a DAG $G_{\bm\phi}$ is identifiable using interventional data in the limit.
+
+\renewcommand\thetheorem{6}
+\begin{theorem}
+\label{theo:6} Assume the aforementioned assumptions. If $n_k \gg \sqrt{n}$ and in the limit $\lambda_n / \sqrt{n} \rightarrow 0$ for all random variables $k\in[1,p]$, then the L2-norm error between the global maximizer $\hat{\bm\phi}$ of $R(\bm\phi)$ and the true parameters $\bm\phi^{\ast}$, $\lVert \hat{\bm\phi} - \bm\phi^{\ast}\rVert$ will be probabilistically bounded by $O_p(n^{-1/2})$.
+\end{theorem}
+
+As a direct result of Theorem (\ref{theo:5}), there is a bound on the observational and interventional data $\mc{X}$, that $n_k \gg \sqrt{n}$. It also imposes a lower bound on the hyperparamater and ``learning rate" $\alpha_k$ such that $\alpha_k=n_k/n\gg n^{-1/2}$. According to Theorem (\ref{theo:6}) there needs to be enough interventional data such that it's statistical error is bounded by $O_p(n^{-1/2})$ to have interventional identifiability. 
+
+Lastly, since there is a need of significant amount of interventional data needed for each node, the total samples $n$ needs to be greater than the number of nodes $p$ ($n\gg p$), because as $p/n\rightarrow 0$ in the limit $n\rightarrow \infty$.
+
+
+\subsection{Hyperparameter $\lambda$ and model selection}
+
+In the algorithm $J$ values of $\lambda_k$ are tested on the general algorithm producing $J$ models as part of the algorithm, such that $\lambda_1 > \dots > \lambda_k > \dots > \lambda_J$ $\forall k \in [1,J]$. The initial value $\lambda_1$ is computed to be:
+\begin{equation*}
+    \lambda_1 = \max_{1\leq i,j\leq p}\lVert\nabla\ell_j(\bm\beta_{j\cdot i}=\bm 0)
+\end{equation*}
+
+BIC as a model selection criterion tends to select too many edges, as such the authors develop their own model selection criterion. It generally selects from the models with the greatest sequent increase in log-likelihood for an increased number of edges, and selects the supremum of that set:
+\begin{align}
+    m^\ast = \sup \{ 2 \leq m \leq J : dr_{(m-1,m)}\geq \alpha*\max\{dr_{(i,i+1)}\forall{i\in[1,J-1]}\}\}\label{eq:2.20}\\
+    dr_{(m-1,m)}=(\ell(\bm\beta_{\lambda_{m+1}})-\ell(\bm\beta_{\lambda_{m}}))/(e_{\lambda_{m+1}}-e_{\lambda_{m}})\nonumber
+\end{align}
+
+\subsection{Experiments}
+
+For clarity, let DCD signify the author's discrete CD algorithm. There are 4 general experiments.
+
+In the first two experiments, interventional and observational data generated from 4 general types of graphs are used to compare graphs generated by DCD and other algorithms. The 4 types of graphs tested are bipartite graph networks, scale-free networks, small-world networks, and random DAGs. The samplings made are all i.i.d. The algorithms compared are the DCD algorithm PC algorithm, GIES algorithm, equi-enegery (EE) sampler, HC algorithm, and MMHC algorithm.
+
+For graph comparisons, the following are counted, predicted edges (P), expected (correct) edges (E), reversed edges (E), and (direction agnostic) false-positive edges (FP). Let $s_0$ represent the true number of edges. Metrics are calculated to be $M=s_0-E+R$ missing edges, $\text{TPR}=\text{E}/s_0$ true positive rate, $\text{FDR}=(\text{R}+\text{FP})/s_0$ false discovery rate, $\text{SHD}=(\text{R}+\text{M}+\text{FP})$ structural Hamming distance, and $\text{JI}=\text{E}/(\text{P}+s_0-\text{E})$ Jaccard index.
+
+The GIES and PC algorithm may return completely partially DAGs (CPDAGs), in which case reverse edges (R) are edges that are backwards in the true CPDAG.
+
+The next experiment covers runtime comparisons which the algorithms. The last experiment compares DCD and the K2 algorithm on real networks.
+
+In all the experiments $J=40$ $\lambda$ values are tested, ranging from $\lambda_1$ to $0.01\lambda$. In the results for DCD, the results for two models using two selection criteria are used, the one in Equation \eqref{eq:2.20} denoted here as DCD* and the one with the lowest SHD denoted her as DCD. 
+
+\subsubsection{Interventional}
+This experiment compares DCD, DCD*, the PC algorithm, GIES algorithm, and equi-energy (EE) sampler on interventional data from the generated graphs. For each experiment on the graphs, 20 data sets were generated for all $(n=pn_k,p)\in\{(50,50),(250,50),$ $(100,100),(500,100)\}$.
+
+For the PC algorithm, the greatest JI (upper bound) and the least SHD (lower bound) are reported to make a clear distinction, while undirected edges of PC are reported as expected. These appears to bias the PC algorithm for this particular comparison. Even so, DCD generally outperformed the PC algorithm with better JI and SHD values. Comparing against the EE sampler, EE produced many extra false positive edges and was outperformed by DCD with lower SHD in the case of $n=p=50$, but in the cases of the bipartite and random DAG, the DCD was outperformed under JI. In all cases of $n=5p$, EE had greatly outperformed DCD under both metrics. This was within author's expectations as EE performs better under low-dimensional settings, with many samples. GIES was significantly outperformed and outmatched by both DCD selections. This was a result of GIES having a very high (FDR) for selecting around 3 times more edges than there was.
+
+Lastly an experiment was performed on all graphs, demonstrating how trading observational with interventional data on nodes decreased SHD for the author's DCD algorithm on $n=500$ with $p=50$ nodes. This trend was mostly the same for all graphs.
+
+
+\subsubsection{Observational}
+This experiment compares DCD, DCD*, the PC algorithm, HC algorithm, and MMHC algorithm on purely high-dimensional observational data from the generated graphs, with there being $p=50$ nodes and the data set size was $n=50$. Again there were 20 data sets generated and models were selected similarly.
+
+The results were in general favoring the performance of the DCD algorithm outperforming PC, MMHC, and HC. DCD however did not perform well on the small-world network where it was out performed by MMHC under SHD, and narrowly beating out HC under JI. The HC algorithm, except for the small-world network, over-estimated the number of edges by a significant margin; The under-estimation in the small-world network while being 2nd closest to the correct edge count may explain why HC almost beat out CD. For all networks except the scale-free network, DCD under-estimated the number of edges. While in general all algorithms greatly-underestimated the edges.
+
+\subsubsection{Runtime}
+This experiment compared the runtime between the different algorithms. They generalized that PC was two times faster than DCD on bipartite and random DAGs, but PC was slower on the other two almost being the same as DCD. HC followed by MMHC were the fastest, although HC did not perform the best.
+
+\subsubsection{Real networks}
+This experiment compares DCD with the K2 algorithm on 8 real networks for nodes ranging in number $p\in[8,441]$. The K2 algorithm requires a topological ordering of nodes, so the true ordering is given to K2. To make a fair comparison only the second loop is ran to compare the K2 and multi-logit model. The data was drawn from a multi-nomial model. The results showed the K2 algorithm was outperformed on both the JI and SHD metric on DCD. The results signify that the select multi-logit model performed exceptionally well.
+
+An experiment was finally ran on flow cytometry data by \citeauthor{sachs2005} a signaling network in the human immune system. In the experiments, interventions were made on the signaling network of $p=11$ measured molecules of 3 levels. The data of size $n=5400$ was ran on DCD and compared to the consensus signaling network. The results showed that DCD outperformed the PC algorithm, EE-sampler, and order-sampler in matching the consensus network. DCD has the fewest false positives on the sparse consensus graph. The K2 algorithm on the other hand was nearly identical to DCD with 1 less false positive edge. Otherwise there was a great resemblance between the DCD graph and the consensus.
+
+\subsection{Discussion and Significance}
+
+\section{Learning Massive Gaussian Bayesian Networks}
+
+The purpose of the PEF algorithm proposed in Chapter 4 of the dissertation is designed to learn the structure ``massive" Gaussian Bayesian networks, with thousands of nodes. The primary motivation for this line of research is that the search space for discovering the structure and parameters of a Bayesian Network grows exponentially with the the count of random variables or nodes. In this section of the dissertation the author explores a more novel method PEF to speed up the learning of massive continuous Bayesian Networks, particularly Gaussian Bayesian networks.
+
+This type of research can be applied to systems where there are a large number of causally linked system variables and an accurate and perhaps approximate structure needs to be learned. One such example could be biological systems where gene expression effects enzyme interactions and other biological factors.
+
+%\subsection{Related Literature}
+\subsection{Model Data Structure}
+
+Gaussian Bayesian Networks (GBN) are paramaterized using a weighted adjacency matrix $B=(\beta_{ij} \mid \forall{i,j}\in[1,p])\in\reals^{p\times p}$ and a set of normal distributions $\epsilon_j \sim N(0,\sigma_j^2)$ per node $\sigma_j^2$. Let $B_j=(B_{ji} \mid \forall i\in[1,p])$, the $j^\text{th}$ column of $B$. The conditional probability distribution (CPD) for a random variable $X_j\in X$ may be written as:
+\begin{equation}
+    \label{eq:4.2}
+    X_j = \sum_{i=1}^p{\beta_{ij}X_i} + \epsilon_j = \sum_{i\in \Pi_j^\mc{G}}^p{\beta_{ij}X_i} + \epsilon_j\;\;\;\forall{j}\in[1,p]
+\end{equation}
+Similar to the discrete CD algorithm, $\beta_{ij}=0 \iff i \not\in \Pi_j^\mc{G} \label{eq:2.8}$. Equation \eqref{eq:4.2} may be written using matrices as follows:
+\begin{equation*}
+    X=BX+E,\;\;\;E\sim N(0,\Sigma)
+\end{equation*}
+where $\sigma$ is a diagonal matrix $\text{diag}(\sigma_i^2 \mid \forall i\in[1,p])$. Let $\mc{X}_j=\in\mc{X}$ be a vector of all values in the data set where for $X_j$, then the log-likelihood of a Gaussian model becomes
+\begin{equation}
+    \ell(B,\Sigma)=\sum_{j=1}^p\bigg[ -\frac{1}{2}\log(\sigma^2_j)-\frac{1}{2\sigma_j^2}\lVert\mc{X}_j - \mc{X}B_j \rVert^2 \bigg]
+\end{equation}
+
+\subsection{Algorithm}
+
+The algorithm PEF proposed is designed to learn the causal structure of a high-dimensional GBN in what they claim to be in the thousands of features or nodes. The general idea of the algorithm is to learn disconnected subgraphs or clusters of the GBN at a time, then recombine them. PEF works in 3 general steps, described generally:
+\begin{enumerate}
+    \item Partition: Each of the random variables $X$ will be associated to one of $k$ clusters using agglomerative (bottom-up) hierarchical clustering using average linking.
+    \item Estimation: Each of the node clusters $C\in\mathcal{C}$ will be individually ran on some structure learning algorithm (in this work, the CDDr algorithm) to learn the DAG for each of the clusters.
+    \item Fusion: In attempt to combine the subgraphs into the final BN structure, a list of candidate edges $A$ is generated. Each of these candidate edges as well as all intra-cluster edges (from E) are evaluated individually according to a penalty function for each of the cases if the model included that undirected edge $(i,j)\in A$ as either $i\rightarrow j$, $j\rightarrow i$, or if it were removed. This process of amending edges is repeated until it converges and no longer modifies the model.
+\end{enumerate}
+
+\subsection{Partition}
+
+In the Partition (P) step of the PEF algorithm, random variables $X$ will be assigned to $k$ disjoint subgraph and clusters $C_i\in \mc{C}$ with each cluster $C_i$ being of size $S_i=|C_i|$. Let $s_w$ be the total amount of edges within all the clusters, and let $s_b$ be the total amount of edges between all clusters. The partitioning of the nodes needs to have 3 objectives in mind, keeping $k$ as large as possible so the Estimation (E) step can be faster, $s_b$ as small as possible to not damage too many connections within the BN, and minimizing the maximum size of $S_i$ by having approximately the same number of nodes within each cluster as much as possible.
+
+\subsubsection{Clustering type}
+
+To partition, agglomerative (bottom-up) clustering was chosen over divisive (top-down) clustering because there are far too many ($2^p-1$) ways to split at each step, while agglomerative there are only $(p^2-p)/2$ ways to join a cluster at each step, and calculating distances between two clusters is easy and fast.
+
+
+\subsubsection{Random variable distance}
+In this paper, correlation is used to determine the distance between a random variables $Y$ and $Z$. When $Y$ and $Z$ are mean-centered and have variance $\sigma=1$, the distance function is defined to be
+\begin{equation}
+    \mbf{d}(Y,Z)=1-|r_{XY}|,
+\end{equation}
+where $r_{YZ}=\text{corr}(Y,Z)$. If $Y$ and $Z$ are perfectly correlated $r_{YZ}=1$ or perfectly and negatively correlated $r_{YZ}=-1$ then the distance $\mbf{d}(Y,Z)=0$, and when not correlated at all $r_{YZ}\approx0$ then $\mbf{d}(Y,Z)=0$. For a Bayesian Network this makes sense because if random variables are correlated either positively or negatively indicate influence between them, and it remains symmetric.
+
+
+\subsubsection{Linkage function}
+When performing agglomerative clustering a linkage function is necessary to measure the distance between clusters. The one's considered were single, complete, and average linkage. The objective for a linkage function here is to combine clusters or subgraphs that likely have more influence over eachother. The single linkage function which uses the distance of the two closest of pairwise nodes would not work well because it could select subgraphs that are disimilar in terms of influence but have very few edges that do have high influence. Complete linkage would be not pair highly intra-influential clusters because it would select two clusters that have the greatest pairwise distance between them. Average linkage, is used instead, it pairs clusters together that are on average most similar and intra-influential to each other.
+
+\subsubsection{Partitioning}
+For choosing the amount of clusters $k$, \citeauthor{jiaying} took the advice of \cite{hartigan1981} with some justification, and decided to cap the amount of clusters to $0.05p$ or $k_\text{max}=20$ clusters. A positive fraction is a cluster $C_i$ with $|C_i|\geq 0.05p$. The total amount of clusters $k$ is chosen to be the minimum of either $k_\text{max}$ or the greatest total amount of positive fraction clusters at any point during the complete $k_{p-1}=1$ clustering process. This helps from producing too many excessive clusters, while also helping to equalize and maximizing clustering size. Let $l_k$ be the highest level (or step) where there is $k$ positive fractions. The clusters on the $l_k$ step $\mc{C}_{l_k}$, are then manually clustered only merging clusters that are non positive fraction clusters into ones that are positive fractions. The result of this clustering becomes the primary clustering for the algorithm $\mc{C}$. This guarantees that every cluster has at least $S_i\leq 0.05p$ nodes.
+
+\subsubsection{Estimation}
+
+In the Estimation (E) step of the algorithm, each of the cluster as subgraphs are learned individually using any structure learning algorithm. \cite{jiaying} chose the CCDr algorithm by \citeauthor{aragam2014}, a CD algorithm. This algorithm is very similar to the ``outer" or first loop of the discrete CD algorithm discussed earlier. \citeauthor{jiaying} chose CCDr over PC and MMHC because it was significantly faster to run by about 17 and 52 times respectively in a high-dimensional setting of $p=1090$. Under the estimation step, multiple threads can be ran individually on each of the clusters to improve runtime. This may only work well on architectures with many hardware threads.
+
+\subsection{Fusion}
+
+The most difficult part, and probably the heart of the PEF algorithm, is probably the Fusion (F) step, where graphs from the E step need to combined and edges between them need to be discovered, and edges then to be resettled.
+
+Let $\mbf Z\subset{X}$ be a set of random variables so random variables $W,Y\not\in \mbf Z$. Using Gaussian data, partial correlation can be used to test conditional independence, such that
+\begin{equation}
+    \label{eq:4.12}
+    \mc{I}_P(W;Y \mid \mbf Z) \iff \rho_{WY\cdot\mbf Z}=0
+\end{equation}
+Let $R_W$ be the residual from linear regression of $W$ onto $\mbf Z$, and $R_Y$ likewise. Then the partial correlation of $W$ and $Y$ given $\mbf Z$ is defined to be $\rho_{WY\cdot\mbf Z}=corr(R_W, R_Y)$. Instead of using residuals, a precision matrix $\Omega=(\omega_{ij})_{(n+2)\times(n+2)}$ being the inverse of covariance matrix of $W,Y,\mbf Z$ could be used instead such that $\rho_{WY\cdot\mbf Z}=-\omega_{12}(\omega_{11}\omega_{22})^{-1/2}$. 
+
+Let $\mc{G}_i=(V_i,E_i)$ correspond to the disconnected subgraph of cluster $C_i\in\mc{C}$, and let $Z_j\in[1,k]$ be the cluster label for which $X_j$ is in, such that $X_j\in C_{Z_j}$. For any two nodes $X_i,X_j$ such that $i\neq j$ and $C_{Z_i}\neq C_{Z_j}$, if the union of their parents allows their conditional independence then there is no edge between them:
+\begin{equation}
+    \label{eq:4.13}
+    \mc{I}_P(X_i;X_j \mid \Pi_i^{\mc{G}_{Z_i}}\cup\Pi_i^{\mc{G}_{Z_i}}) \implies (i,j)\not\in{A}.
+\end{equation}
+Equation \eqref{eq:4.12} and \eqref{eq:4.13} imply that if the correlation between $X_i$ and $X_j$ given the union of their parents is $0$ or statistically close to $0$, then there is not or is likely not an edge between them. The authors approximate this correlation by using residuals $\tilde{R}_i$ and $\tilde{R}_j$ of projecting $X_i$ and $X_j$ onto their own (individual) parents in $\mc{G}_{Z_i}$ in $\mc{G}_{Z_j}$ respectfully so that it equals $\tilde{\rho}_{ij}=corr(\tilde{R}_i,\tilde{R}_j)$.
+
+\subsubsection{Eliminating candidate edges}
+
+First, performing a statistical test on $\tilde{\rho}_{ij}$ on all pairwise nodes $X_i$ and $X_j$ between subgraphs $\mc{G}_k$ allows a candidate set $\tilde{A}$ to be made, such that all edges $(i,j)$ which do not have correlation $\tilde{p}_{ij}$ significantly greater than 0 can be eliminated, such that $\tilde{A}=\{(i,j) : |\tilde{\rho}_{ij}|$ is signifcantly greater than 0 $\}$.
+
+Next all pairs of edges $(i,j)\in{\tilde A}$ are re-evaluated one by one into a final candidate list $A$, where the order is in ascending order of the p-value in the test $\tilde\rho_{ij}$ being greater than $0$ so edges that are likely will be processed first. Let $P_{ij}$ be the parent set of nodes currently in $A$, such that $P_{ij}=\{k: (k,i)\in A \vee (k,j)\in A \}$. Let $\mbf Z = \Pi_i^{\mc{G}_{Z_i}} \cup \Pi_i^{\mc{G}_{Z_i}} \cup P_{ij}$. If $\mc{I}_P(X_i;X_j \mid \mbf Z$ then the edge $(i,j)$ is inserted into $A$, and otherwise, not being independent, the edge is rejected. 
+
+\subsubsection{Fuse}
+
+The authors reject BIC (Bayesian Information Criterion) as a scoring function on the basis that it tends to introduce far too many false psotive edges (as it was in the discrete CD), and opt for the RIC (Risk Inflation Criteiron) score developed by \citeauthor{foster1994risk} instead. The RIC score is measured as follows:
+\begin{equation*}
+    \text{BIC}=-2\ell+2\log(p)\pi
+\end{equation*}
+where $\ell$ is the log-likelihood, and $\pi$ is the number of paramaters in the model. Under the RIC score, higher is better as it is a penalty function.
+
+The fuse algorithm works as follows.
+
+Let $\mc{G}$ be the fused graph of all the clusters or subgraphs. In the fuse algorithm, before the edges $A$ are added the graph, all edges currently in it (from the Estimation step) are added to $A$ as well.
+
+For every edge $(i,j)\in{A}$, remove the edge from the graph to reconsider adding it back later. Perform the independence test $\mc{I}_P(X_i;Y_i \mid \Pi_i^{\mc{G}_{Z_i}}\cup\Pi_i^{\mc{G}_{Z_i}})$, if it is independent then the edge can be removed from the candidate list $A$. Otherwise the algorithm compares the RIC score of 3 models of $\mc{G}$: there is no edge $i$ and $j$ ($M_0$), $i\rightarrow j$ ($M_1$), and $j\rightarrow i$ ($M_2$). The edge will be added to $\mc{G}$ under the condition,
+\begin{equation*}
+    \max(\text{RIC}(M_1),\text{RIC}(M_2))<\text{RIC}(M_0)
+\end{equation*}
+If the condition passes, the edge that doesn't induce cycles is introduced to the graph $\mc{G}$, otherwise the edge with the lowest RIC score is added to $\mc{G}$. Until the structure of $\mc{G}$ stops updating, all edges are reconsidered as just explained, thus concluding the algorithm.
+
+\subsection{Experiments}
+
+3 different types of massive GBNs were generated and compared under CCDr and PEF.
+
+The first graph type tests 5 networks (PATHFINDER, ANDES, DIABETES, PIGS, and LINK) individually duplicated and fused together for $k=5$ times by randomly adding $s_b=\alpha s_w$ edges for $\alpha=0,0.01,0.02,0.05,0.1$. The second graph type used had all the 5 networks fused together by randomly adding between edges in the same way for same $\alpha$. The last graph type tested was the MUNIN network, where it is replicated and not fused together $\forall k\in[1,9]$ times, so the total edges is $s_0=s_w=ks_\text{sub}$
+
+Data sets were generated under Equation \eqref{eq:4.2} and parameters $\beta_{ij}$ were sampled from $[-1,-0.5]\cup[0,5,1]$ if $(i,j)\in E$, and $0$ otherwise. There are $n=1000$ observations were made for each of 10 data sets, but only one dataset was generated for the last MUNIN experiment.
+
+Comparing runtime between CCDr and PEF varying $p$ nodes, demonstrated that PEF ran significantly faster than CCDr, and the rate at which runtime increased with increasing $p$ was much less for PEF than CCDr. When compared on the MUNIN graphs, with an increase in $k$ subgraphs (linear increase in $p$), the PEF algorithm runtime appeared to increase somewhat linearly, CCDr got increasingly slower with more nodes, where high $p$ had PEF about 50 times faster than CCDr.
+
+In all experiments, CCDr was outperformed by PEF by about a significant amount being higher on JI metric (about 30\%) and significantly lower on SHD metric (about 20\%). Under PATHFINDER $p=545$, the number of expected (correct) edges are about the same, but PEF was more accurate in edge directions and CCDr had too many false positives. In general while expected edges for both algorithms were lower, PEF had 15\% more correct edges and 35\% less reversed and false positive. The inaccuracies made in the partition step in regards to edges were mostly resolved in the F step. Unfortunately missing edges from the E step cannot be recovered in the F step however.
+
+The 3 desires for partitioning mentioned earlier were measured: many $\hat{k}$ clusters, few $\hat{s}_b$ edges, and small $S_\text{max}=\max(S_i)$ (also high $S_\text{min}=\min(S_i)$). The results of $S_\text{min}$ demonstrated that clusters were not too small, and with $S_\text{max}$ showed that cluster size differences ranged between about $1$ to $5$ times greater at most in all cases. The partition step had generated about twice the amount of between edges $\hat{s}_b$ than the true $s_b$ in general. The cluster sizes $\hat{k}$ never maxed out to size $k_\text{max}=20$. The PATHFINDER did not perform so well in detecting clusters due to its star shaped structure. Cluster size when decreaseded allows for greater accuracy in the first two steps (PE).
+
+Fusion step recovery was also examined, comparing the results after PE and the results after fusion. The results showed in the majority of cases with respect to PEF from PE, expected (correct) edges (E) increased, incorrect directed edges (R) decreased, and false positives (FP) decreased drastically. As a result SHD decreased greatly and JI increased greatly. The number of predicted edges went down, likely as a result of inability to recover missing edges after E.
+
+
+\section{Conclusion}
+
+The major contributions of the Discrete CD algorithm of Chapter 2 in the dissertation are:\begin{enumerate}
+    \item An extension of an accurate and efficient method for discovering the discrete BN structure using interventional and observational data.
+    \item The algorithm is competitive in that it generally performs better than other currently established and competing algorithms.
+    \item Runs exceptionally well (competitively) on both synthetic and real world data sets in discovering casual relations between nodes.
+\end{enumerate}
+
+The major contributions of the PEF algorithm of Chapter 4 in the dissertation are: \begin{enumerate}
+    \item A novel method for accurately learning the structure of a GBN with very high-dimensionality (in the thousands of random variables).
+    \item Helped develop and establish a general methodology for training massive GBNs (and perhaps BNs in general). The methodology is the partitioning of the variables into clusters, estimating the subgraph cluster's structure and edges, and joining and amending existing nodes. 
+    \item Much faster than ``currently" competing algorithms during its publication.
+\end{enumerate}
+
+
+
+\vskip 0.2in
+\bibliography{sample}
+
+\end{document}
